@@ -2,20 +2,21 @@ package com.example.pictureloader.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.pictureloader.R
 import com.example.pictureloader.model.HttpHandler
+import com.example.pictureloader.model.NetHandler
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val network:NetHandler = NetHandler.getInstance()
         textView.setOnClickListener{
-            Thread {
-                HttpHandler.requestGET(
-                    "https://storage.yandexcloud.net/pioneer.geoscan.aero/pioneer_mini/ESP_32/ESP32.json"
-                ) { text -> runOnUiThread { textView.text = text } }
-            }.start()
+            network.requestGET("https://jsonplaceholder.typicode.com/users") {
+                    _in -> Log.i("RASPBERRY",network.getString(_in))
+            }
         }
     }
 }
