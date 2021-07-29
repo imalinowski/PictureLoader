@@ -31,6 +31,7 @@ public class NetHandler {
             while (true) {
                 if(requests.isEmpty()) LOCK.wait();
                 Request request = requests.poll();
+                assert request != null;
                 URLConnection connection = new URL(request.URL).openConnection();
                 request.callback.accept(connection.getInputStream());
             }
