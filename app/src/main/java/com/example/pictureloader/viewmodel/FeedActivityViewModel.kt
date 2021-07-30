@@ -1,5 +1,6 @@
 package com.example.pictureloader.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pictureloader.model.NetHandler
@@ -17,6 +18,7 @@ class FeedActivityViewModel : ViewModel() {
                 val albums = JSONTokener(netHandler.getString(_in)).nextValue() as JSONArray
                 for (i in 0 until albums.length())
                     loadAlbum(albums.getJSONObject(i).getInt("id"))
+                Log.i("RASPBERRY","${albums.length()} albums for user $userId loaded")
             }
         }
     }
@@ -31,6 +33,7 @@ class FeedActivityViewModel : ViewModel() {
                         photos.getJSONObject(i).getString("url").toString()
                     ))
                 this.photos.postValue(this.photos.value)
+                Log.i("RASPBERRY","${photos.length()} photos for album $albumId loaded")
             }
         }
     }

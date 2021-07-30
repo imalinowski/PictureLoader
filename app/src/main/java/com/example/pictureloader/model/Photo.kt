@@ -1,3 +1,5 @@
 package com.example.pictureloader.model
 
-data class Photo(val title:String, val url:String)
+import android.graphics.Bitmap
+
+data class Photo(val title:String, val url:String, var image:Bitmap? = null)
