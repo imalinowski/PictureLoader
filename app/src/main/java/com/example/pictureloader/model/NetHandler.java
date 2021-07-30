@@ -26,8 +26,8 @@ public class NetHandler {
         if(netHandler == null) {
             netHandler = new NetHandler();
             netHandler.requests = new LinkedList<>();
+            netHandler.networkThread.start();
         }
-        netHandler.networkThread.start();
         return netHandler;
     }
 

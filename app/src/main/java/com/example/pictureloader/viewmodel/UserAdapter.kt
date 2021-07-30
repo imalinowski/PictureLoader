@@ -1,5 +1,6 @@
 package com.example.pictureloader.viewmodel
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,24 +9,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pictureloader.R
 import com.example.pictureloader.model.User
 
-class UserAdapter(private val flowerList: MutableList<User>):
-    RecyclerView.Adapter<UserAdapter.FlowerViewHolder>() {
+class UserAdapter(private val flowerList: MutableList<User>, val itemClick : (id:Int)->Unit ):
+    RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
-    class FlowerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        private val flowerTextView: TextView = itemView.findViewById(R.id.flower_text)
-        fun bind(word: String){
-            flowerTextView.text = word
+    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        private val textView: TextView = itemView.findViewById(R.id.flower_text)
+        fun bind(word: String, listener : () -> Unit){
+            textView.text = word
+            itemView.setOnClickListener { listener() }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FlowerViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_text, parent, false)
-        return FlowerViewHolder(view)
+        return UserViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FlowerViewHolder, position: Int) {
-        holder.bind(flowerList[position].name)
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+        holder.bind(flowerList[position].name) {
+            itemClick(flowerList[position].id)
+        }
     }
 
     override fun getItemCount(): Int {
