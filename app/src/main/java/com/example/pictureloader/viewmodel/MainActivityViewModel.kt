@@ -1,6 +1,5 @@
 package com.example.pictureloader.viewmodel
 
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,8 +9,6 @@ import org.json.JSONArray
 import org.json.JSONTokener
 
 class MainActivityViewModel : ViewModel() {
-    val text = MutableLiveData<String>()
-    val image = MutableLiveData<Bitmap>()
     val users = MutableLiveData<MutableList<User>>().apply { value = mutableListOf() }
     private val netHandler:NetHandler = NetHandler.getInstance()
 
@@ -30,10 +27,4 @@ class MainActivityViewModel : ViewModel() {
         }
     }
 
-    fun requestGET(){
-        val url1:String = "https://via.placeholder.com/600/92c952"
-        val url2:String = "https://jsonplaceholder.typicode.com/users"
-        netHandler.requestGET(url1) { _in -> image.postValue(netHandler.getImage(_in)) }
-        netHandler.requestGET(url2) { _in -> text.postValue(netHandler.getString(_in)) }
-    }
 }

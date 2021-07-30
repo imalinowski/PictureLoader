@@ -1,5 +1,6 @@
 package com.example.pictureloader.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pictureloader.model.NetHandler
 import com.example.pictureloader.model.Photo
@@ -8,7 +9,7 @@ import org.json.JSONTokener
 
 class FeedActivityViewModel : ViewModel() {
     private val netHandler: NetHandler = NetHandler.getInstance()
-    private val photos = mutableListOf<Photo>()
+    val photos = MutableLiveData<MutableList<Photo>>().apply { value = mutableListOf() }
 
     fun init(userId: Int) {
         netHandler.requestGET("https://jsonplaceholder.typicode.com/user/$userId/albums") { _in ->
@@ -25,10 +26,11 @@ class FeedActivityViewModel : ViewModel() {
             run {
                 val photos = JSONTokener(netHandler.getString(_in)).nextValue() as JSONArray
                 for (i in 0 until photos.length())
-                    this.photos.add(Photo(
-                        photos.getJSONObject(i).getInt("title").toString(),
-                        photos.getJSONObject(i).getInt("url").toString()
+                    this.photos.value?.add(Photo(
+                        photos.getJSONObject(i).getString("title").toString(),
+                        photos.getJSONObject(i).getString("url").toString()
                     ))
+                this.photos.postValue(this.photos.value)
             }
         }
     }

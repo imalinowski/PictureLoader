@@ -9,10 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.Consumer;
@@ -40,7 +38,7 @@ public class NetHandler {
                 assert request != null;
                 HttpURLConnection connection = (HttpURLConnection) new URL(request.URL).openConnection();
                 connection.setRequestProperty("User-Agent", ""); // server side ide
-                Log.i("RASPBERRY",connection.getResponseCode() +" "+ connection.getResponseMessage() );
+                //Log.i("RASPBERRY",connection.getResponseCode() +" "+ connection.getResponseMessage() );
                 if(connection.getResponseCode() == HttpURLConnection.HTTP_OK)
                     request.callback.accept(connection.getInputStream());
             }

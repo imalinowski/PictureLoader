@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PictureLoader</string>
+    <string name="picture">picture</string>
 </resources>

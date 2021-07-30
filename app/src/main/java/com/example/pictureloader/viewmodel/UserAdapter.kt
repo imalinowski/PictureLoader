@@ -1,6 +1,5 @@
 package com.example.pictureloader.viewmodel
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ class UserAdapter(private val flowerList: MutableList<User>, val itemClick : (id
     RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        private val textView: TextView = itemView.findViewById(R.id.flower_text)
+        private val textView: TextView = itemView.findViewById(R.id.name)
         fun bind(word: String, listener : () -> Unit){
             textView.text = word
             itemView.setOnClickListener { listener() }
