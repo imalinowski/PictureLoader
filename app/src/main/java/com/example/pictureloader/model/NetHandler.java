@@ -1,10 +1,16 @@
 package com.example.pictureloader.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedList;
@@ -32,8 +38,11 @@ public class NetHandler {
                 if(requests.isEmpty()) LOCK.wait();
                 Request request = requests.poll();
                 assert request != null;
-                URLConnection connection = new URL(request.URL).openConnection();
-                request.callback.accept(connection.getInputStream());
+                HttpURLConnection connection = (HttpURLConnection) new URL(request.URL).openConnection();
+                connection.setRequestProperty("User-Agent", ""); // server side ide
+                Log.i("RASPBERRY",connection.getResponseCode() +" "+ connection.getResponseMessage() );
+                if(connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+                    request.callback.accept(connection.getInputStream());
             }
         } catch (InterruptedException | IOException e) {
             Log.e("RASPBERRY",e.getMessage());
@@ -46,6 +55,10 @@ public class NetHandler {
         reader.lines().forEach( l -> body.append(l).append("\r\n"));
         reader.close();
         return  body.toString();
+    }
+
+    public Bitmap getImage(InputStream _in){
+        return BitmapFactory.decodeStream(new BufferedInputStream(_in));
     }
 
     public void requestGET(String URL, Consumer<InputStream> callback){ synchronized (LOCK) {
