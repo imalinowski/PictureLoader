@@ -33,9 +33,11 @@ public class NetHandler {
     final Thread networkThread = new Thread(()-> { synchronized (LOCK){
         try {
             while (true) {
-                if(requests.isEmpty()) LOCK.wait();
                 Request request = requests.poll();
-                assert request != null;
+                if(request == null) {
+                    LOCK.wait();
+                    continue;
+                }
                 HttpURLConnection connection = (HttpURLConnection) new URL(request.URL).openConnection();
                 connection.setRequestProperty("User-Agent", ""); // server side ide
                 //Log.i("RASPBERRY",connection.getResponseCode() +" "+ connection.getResponseMessage() );
@@ -59,10 +61,17 @@ public class NetHandler {
         return BitmapFactory.decodeStream(new BufferedInputStream(_in));
     }
 
-    public void requestGET(String URL, Consumer<InputStream> callback){ synchronized (LOCK) {
+    public void requestGET(String URL, Consumer<InputStream> callback){
         requests.add(new Request(URL,callback));
-        LOCK.notify();
-    } }
+        synchronized (LOCK) {
+            LOCK.notify();
+        }
+    }
+
+    public void clearRequests(){
+        requests.clear();
+        Log.d("RASPBERRY","request Queue > cleared <");
+    }
 
     private static class Request {
         final String URL;
@@ -73,4 +82,5 @@ public class NetHandler {
             this.callback = callback;
         }
     }
+
 }

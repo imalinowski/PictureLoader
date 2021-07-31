@@ -1,8 +1,5 @@
 package com.example.pictureloader.viewmodel
 
-import android.opengl.Visibility
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View

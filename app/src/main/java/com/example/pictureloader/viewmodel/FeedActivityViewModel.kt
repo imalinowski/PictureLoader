@@ -33,8 +33,13 @@ class FeedActivityViewModel : ViewModel() {
                         photos.getJSONObject(i).getString("url").toString()
                     ))
                 this.photos.postValue(this.photos.value)
-                Log.i("RASPBERRY","${photos.length()} photos for album $albumId loaded")
+                Log.i("RASPBERRY","${photos.length()} photo's url for album $albumId loaded")
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        netHandler.clearRequests()
     }
 }
