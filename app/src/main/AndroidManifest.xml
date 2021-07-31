@@ -13,8 +13,10 @@
         android:theme="@style/Theme.PictureLoader">
         <activity
             android:name=".view.FeedActivity"
-            android:exported="true" />
-        <activity android:name=".view.MainActivity">
+            android:label="Photos"
+            />
+        <activity android:name=".view.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
