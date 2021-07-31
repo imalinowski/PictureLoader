@@ -8,21 +8,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pictureloader.R
+import com.example.pictureloader.model.DBHelper
 import com.example.pictureloader.model.NetHandler
 import com.example.pictureloader.model.Photo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FeedAdapter(private val flowerList: MutableList<Photo>):
+class FeedAdapter(private val flowerList: MutableList<Photo>, val netHandler: NetHandler, val dbHandler:DBHelper):
     RecyclerView.Adapter<FeedAdapter.UserViewHolder>() {
 
-    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         private val textView: TextView = itemView.findViewById(R.id.text)
         private val image: ImageView = itemView.findViewById(R.id.image)
         fun bind(photo: Photo){
             textView.text = photo.title
-            val netHandler = NetHandler.getInstance()
+            photo.image = dbHandler.request(photo.url)
             if(photo.image != null) {
                 Log.i("RASPBERRY", "${photo.url} image loaded from cache")
                 image.setImageBitmap(photo.image)
@@ -33,6 +34,7 @@ class FeedAdapter(private val flowerList: MutableList<Photo>):
                     netHandler.requestGET(photo.url) {
                         Log.i("RASPBERRY", "${photo.url} image loaded")
                         photo.image = netHandler.getImage(it)
+                        dbHandler.createItem(photo.url,photo.image)
                         CoroutineScope(Dispatchers.Main).launch{
                             image.visibility = View.VISIBLE
                             image.setImageBitmap(photo.image)

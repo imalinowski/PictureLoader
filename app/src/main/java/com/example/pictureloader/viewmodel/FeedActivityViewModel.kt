@@ -3,6 +3,7 @@ package com.example.pictureloader.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pictureloader.model.DBHelper
 import com.example.pictureloader.model.NetHandler
 import com.example.pictureloader.model.Photo
 import org.json.JSONArray
@@ -10,6 +11,7 @@ import org.json.JSONTokener
 
 class FeedActivityViewModel : ViewModel() {
     private val netHandler: NetHandler = NetHandler.getInstance()
+    //private val dbHandler: DBHelper = DBHelper() //todo
     val photos = MutableLiveData<MutableList<Photo>>().apply { value = mutableListOf() }
 
     fun init(userId: Int) {
