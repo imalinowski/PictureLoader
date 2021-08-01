@@ -1,13 +1,13 @@
-package com.example.pictureloader.view
+package com.malinowski.pictureloader.view
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pictureloader.R
-import com.example.pictureloader.model.DBHelper
-import com.example.pictureloader.model.NetHandler
-import com.example.pictureloader.viewmodel.FeedActivityViewModel
-import com.example.pictureloader.viewmodel.FeedAdapter
+import com.malinowski.pictureloader.model.DBHelper
+import com.malinowski.pictureloader.model.NetHandler
+import com.malinowski.pictureloader.viewmodel.FeedActivityViewModel
+import com.malinowski.pictureloader.viewmodel.FeedAdapter
 import kotlinx.android.synthetic.main.activity_feed.*
 
 class FeedActivity : AppCompatActivity() {

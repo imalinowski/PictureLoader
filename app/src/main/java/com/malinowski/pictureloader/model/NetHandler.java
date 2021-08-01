@@ -1,4 +1,4 @@
-package com.example.pictureloader.model;
+package com.malinowski.pictureloader.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

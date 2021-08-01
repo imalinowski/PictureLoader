@@ -1,4 +1,4 @@
-package com.example.pictureloader
+package com.malinowski.pictureloader
 
 import org.junit.Test
 

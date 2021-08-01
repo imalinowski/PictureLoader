@@ -1,4 +1,4 @@
-package com.example.pictureloader.model;
+package com.malinowski.pictureloader.model;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -51,24 +51,29 @@ public class DBHelper extends SQLiteOpenHelper {
                 KEY_URL + "= ?",
                 new String[]{url},
                 null, null, null);
-        if (cursor == null || !cursor.moveToFirst()) {
+        try {
+            if (cursor == null || !cursor.moveToFirst())
+                return null;
+            String path = cursor.getString(3);
+            update(url, cursor.getInt(2) + 1);
+            Log.i("RASPBERRY", "DB loaded > " + cursor.getInt(2) + " " + path);
+            cursor.close();
+            db.close();
+            return BitmapFactory.decodeFile(path);
+        } catch (IllegalStateException e) {
+            Log.e("RASPBERRY", e.getMessage());
             return null;
         }
-        String path = cursor.getString(3);
-        update(url, cursor.getInt(2) + 1);
-        Log.i("RASPBERRY", "DB loaded > " + cursor.getInt(2) + " " + path);
-        cursor.close();
-        db.close();
-        return BitmapFactory.decodeFile(path);
     }
 
-    private int update(String url, int age) {
+    private void update(String url, int age) throws IllegalStateException {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_AGE, Math.max(20,age));
+        values.put(KEY_AGE, Math.min(10, age));
 
-        return db.update(DB_NAME, values, KEY_URL + " = ?", new String[]{url});
+        db.update(DB_NAME, values, KEY_URL + " = ?", new String[]{url});
+        db.close();
     }
 
     public void createItem(String url, Bitmap bitmap) {
@@ -84,7 +89,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_URL, url);
-        values.put(KEY_AGE, 3);
+        values.put(KEY_AGE, 3); // delete when 0 max is 10
         values.put(KEY_PATH, path);
 
         long row = db.insertOrThrow(DB_NAME, null, values);
@@ -96,7 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.i("RASPBERRY", "DB add " + url);
     }
 
-    private String saveToInternalStorage(String name, Bitmap bitmapImage) throws NullPointerException, IOException {
+    private String saveToInternalStorage(String name, Bitmap bitmapImage) throws IOException {
         ContextWrapper cw = new ContextWrapper(context.getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         File file = new File(directory, name.replaceAll("/", "") + ".png");
@@ -109,17 +114,32 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void clear() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query(DB_NAME, new String[]{KEY_URL, KEY_AGE},
+        Cursor cursor = db.query(DB_NAME, new String[]{KEY_URL, KEY_AGE, KEY_PATH},
                 null, null, null, null, null);
-        if (cursor == null || !cursor.moveToFirst()) {
-            return;
+        try {
+            if (cursor == null || !cursor.moveToFirst()) {
+                return;
+            }
+            while (cursor.moveToNext()) {
+                int age = cursor.getInt(1) - 1;
+                update(cursor.getString(0), age);
+                if (age > 0) continue;
+                File file = new File(cursor.getString(2));
+                if (!file.exists())
+                    Log.i("RASPBERRY", cursor.getString(0) + " already deleted from storage");
+                else if (file.delete())
+                    Log.i("RASPBERRY", cursor.getString(0) + " deleted from storage");
+                else
+                    Log.e("RASPBERRY", cursor.getString(0) + " error delete from storage");
+            }
+            db = this.getWritableDatabase();
+            cursor.close();
+            Log.i("RASPBERRY", "cache > " +
+                    db.delete(DB_NAME, KEY_AGE + " < ?", new String[]{"1"})
+                    + " rows > deleted as unused <");
+            db.close();
+        } catch (IllegalStateException e) {
+            Log.e("RASPBERRY", e.getMessage());
         }
-        while (cursor.moveToNext())
-            update(cursor.getString(0), cursor.getInt(1) - 1);
-        cursor.close();
-        Log.i("RASPBERRY","cache > " +
-                db.delete(DB_NAME, KEY_AGE + " = ?", new String[]{"0"})
-                        + " rows > deleted as unused <");
-        db.close();
     }
 }

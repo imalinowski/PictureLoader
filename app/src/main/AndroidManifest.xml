@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PictureLoader">
         <activity
-            android:name=".view.FeedActivity"
+            android:name="com.malinowski.pictureloader.view.FeedActivity"
             android:label="Photos"
             />
-        <activity android:name=".view.MainActivity"
+        <activity android:name="com.malinowski.pictureloader.view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package com.example.pictureloader.viewmodel
+package com.malinowski.pictureloader.viewmodel
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pictureloader.R
-import com.example.pictureloader.model.User
+import com.malinowski.pictureloader.model.User
 
 class UserAdapter(private val flowerList: MutableList<User>, val itemClick : (id:Int)->Unit ):
     RecyclerView.Adapter<UserAdapter.UserViewHolder>() {

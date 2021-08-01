@@ -1,14 +1,14 @@
-package com.example.pictureloader.view
+package com.malinowski.pictureloader.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.pictureloader.R
-import com.example.pictureloader.viewmodel.MainActivityViewModel
+import com.malinowski.pictureloader.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.activity.viewModels
-import com.example.pictureloader.viewmodel.UserAdapter
+import com.malinowski.pictureloader.viewmodel.UserAdapter
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModels()

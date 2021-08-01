@@ -1,10 +1,10 @@
-package com.example.pictureloader.viewmodel
+package com.malinowski.pictureloader.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pictureloader.model.NetHandler
-import com.example.pictureloader.model.Photo
+import com.malinowski.pictureloader.model.NetHandler
+import com.malinowski.pictureloader.model.Photo
 import org.json.JSONArray
 import org.json.JSONTokener
 
@@ -28,10 +28,12 @@ class FeedActivityViewModel : ViewModel() {
             run {
                 val photos = JSONTokener(netHandler.getString(_in)).nextValue() as JSONArray
                 for (i in 0 until photos.length())
-                    this.photos.value?.add(Photo(
+                    this.photos.value?.add(
+                        Photo(
                         photos.getJSONObject(i).getString("title").toString(),
                         photos.getJSONObject(i).getString("url").toString()
-                    ))
+                    )
+                    )
                 this.photos.postValue(this.photos.value)
                 Log.i("RASPBERRY","${photos.length()} photo's url for album $albumId loaded")
             }

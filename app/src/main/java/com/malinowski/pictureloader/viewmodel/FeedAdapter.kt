@@ -1,4 +1,4 @@
-package com.example.pictureloader.viewmodel
+package com.malinowski.pictureloader.viewmodel
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,14 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pictureloader.R
-import com.example.pictureloader.model.DBHelper
-import com.example.pictureloader.model.NetHandler
-import com.example.pictureloader.model.Photo
+import com.malinowski.pictureloader.model.DBHelper
+import com.malinowski.pictureloader.model.NetHandler
+import com.malinowski.pictureloader.model.Photo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FeedAdapter(private val flowerList: MutableList<Photo>,private val netHandler: NetHandler, private val dbHandler:DBHelper):
+class FeedAdapter(private val flowerList: MutableList<Photo>, private val netHandler: NetHandler, private val dbHandler: DBHelper):
     RecyclerView.Adapter<FeedAdapter.UserViewHolder>() {
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
