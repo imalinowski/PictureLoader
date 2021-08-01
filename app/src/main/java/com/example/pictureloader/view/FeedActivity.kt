@@ -16,12 +16,21 @@ class FeedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
+
         viewModel.init(intent.getIntExtra("id",1))
-        val adapter: FeedAdapter =
+
+        val adapter =
             FeedAdapter(viewModel.photos.value!!, NetHandler.getInstance(), DBHelper(this))
         recycler_view_feed.adapter = adapter
+
         viewModel.photos.observe(this,{
             adapter.notifyItemInserted(it.size - 1)
         })
     }
+
+    override fun onStop() {
+        super.onStop()
+        (recycler_view_feed.adapter as FeedAdapter).clear()
+    }
+
 }

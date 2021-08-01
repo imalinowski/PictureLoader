@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FeedAdapter(private val flowerList: MutableList<Photo>, val netHandler: NetHandler, val dbHandler:DBHelper):
+class FeedAdapter(private val flowerList: MutableList<Photo>,private val netHandler: NetHandler, private val dbHandler:DBHelper):
     RecyclerView.Adapter<FeedAdapter.UserViewHolder>() {
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -60,4 +60,7 @@ class FeedAdapter(private val flowerList: MutableList<Photo>, val netHandler: Ne
         return flowerList.size
     }
 
+    fun clear() {
+        dbHandler.clear()
+    }
 }
