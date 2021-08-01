@@ -54,11 +54,11 @@ public class DBHelper extends SQLiteOpenHelper {
         if(cursor == null || !cursor.moveToFirst()) {
             return null;
         }
-        Log.i("RASPBERRY","loaded > " + url);
-        String path = cursor.getString(1);
-        update(url,cursor.getInt(1) + 1);
+        String path = cursor.getString(3);
+        update(url,cursor.getInt(2) + 1);
+        Log.i("RASPBERRY","DB loaded > " + cursor.getInt(2) + " " + path);
         cursor.close();
-        return BitmapFactory.decodeFile(path.replaceAll("/",""));
+        return BitmapFactory.decodeFile(path);
     }
 
     private int update(String url, int age) {
