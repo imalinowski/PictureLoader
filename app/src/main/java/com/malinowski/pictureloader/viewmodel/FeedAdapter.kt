@@ -35,7 +35,7 @@ class FeedAdapter(private val flowerList: MutableList<Photo>, private val netHan
                         Log.i("RASPBERRY", "${photo.url} image loaded")
                         photo.image = netHandler.getImage(it)
                         dbHandler.createItem(photo.url,photo.image)
-                        CoroutineScope(Dispatchers.Main).launch{
+                        if(photo.title == textView.text) CoroutineScope(Dispatchers.Main).launch{
                             image.visibility = View.VISIBLE
                             image.setImageBitmap(photo.image)
                         }

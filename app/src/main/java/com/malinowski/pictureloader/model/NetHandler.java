@@ -13,17 +13,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 import java.util.function.Consumer;
 
 public class NetHandler {
     private static NetHandler netHandler;
-    private Queue<Request> requests;
+    private Stack<Request> requests;
 
     private NetHandler(){ }
     public static NetHandler getInstance(){
         if(netHandler == null) {
             netHandler = new NetHandler();
-            netHandler.requests = new LinkedList<>();
+            netHandler.requests = new Stack<>();
             netHandler.networkThread.start();
         }
         return netHandler;
@@ -33,11 +34,11 @@ public class NetHandler {
     final Thread networkThread = new Thread(()-> { synchronized (LOCK){
         try {
             while (true) {
-                Request request = requests.poll();
-                if(request == null) {
+                if(requests.empty()) {
                     LOCK.wait();
                     continue;
                 }
+                Request request = requests.pop();
                 HttpURLConnection connection = (HttpURLConnection) new URL(request.URL).openConnection();
                 connection.setRequestProperty("User-Agent", ""); // server side ide
                 //Log.i("RASPBERRY",connection.getResponseCode() +" "+ connection.getResponseMessage() );
@@ -70,7 +71,7 @@ public class NetHandler {
 
     public void clearRequests(){
         requests.clear();
-        Log.d("RASPBERRY","request Queue > cleared <");
+        Log.d("RASPBERRY","requests stack > cleared <");
     }
 
     private static class Request {
