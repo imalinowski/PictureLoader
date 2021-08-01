@@ -80,10 +80,6 @@ public class DBHelper extends SQLiteOpenHelper {
         String path;
         try {
             path = saveToInternalStorage(url, bitmap);
-        } catch (IOException e) {
-            Log.e("RASPBERRY", "save to storage> " + e.getMessage());
-            return;
-        }
         Log.i("RASPBERRY", "new item in " + path);
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -99,6 +95,9 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.e("RASPBERRY", "DB add " + url);
         else
             Log.i("RASPBERRY", "DB add " + url);
+        } catch (IOException | IllegalStateException e) {
+            Log.e("RASPBERRY", "create Item > " + e.getMessage());
+        }
     }
 
     private String saveToInternalStorage(String name, Bitmap bitmapImage) throws IOException {
